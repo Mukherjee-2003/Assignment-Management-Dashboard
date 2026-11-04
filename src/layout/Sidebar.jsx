@@ -1,26 +1,46 @@
-import { useState } from "react";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = ({ isMenuOpen }) => {
-    const [activeItem, setActiveItem] = useState("DASHBOARD");
-    const role = "STUDENT";
+    const { user } = useContext(AuthContext); 
+    const role = user?.role;
 
     const navItems =
-        role === "ADMIN"
+        role === "admin"
             ? [
-                  { name: "DASHBOARD", label: "Dashboard" },
-                  { name: "ASSIGNMENTS", label: "Assignments" },
-                  { name: "STUDENTS", label: "Students" },
-                  { name: "PROFILE", label: "Profile" },
+                  {
+                      name: "DASHBOARD",
+                      label: "Dashboard",
+                      link: "/admin/dashboard",
+                  },
+                  {
+                      name: "ASSIGNMENTS",
+                      label: "Assignments",
+                      link: "/admin/assignments",
+                  },
+                  {
+                      name: "STUDENTS",
+                      label: "Students",
+                      link: "/admin/students",
+                  },
               ]
             : [
-                  { name: "DASHBOARD", label: "Dashboard" },
-                  { name: "MY_ASSIGNMENTS", label: "My Assignments" },
-                  { name: "PROFILE", label: "Profile" },
+                  {
+                      name: "DASHBOARD",
+                      label: "Dashboard",
+                      link: "/students/dashboard",
+                  },
+                  {
+                      name: "MY_ASSIGNMENTS",
+                      label: "My Assignments",
+                      link: "/students/assignments",
+                  },
               ];
 
-    const getItemClass = (itemName) =>
-        `p-2 rounded-xl transition-colors cursor-pointer ${
-            activeItem === itemName
+    const getLinkClass = ({ isActive }) =>
+        `block p-2 rounded-xl transition-colors cursor-pointer w-full text-center ${
+            isActive
                 ? "bg-indigo-600 text-white"
                 : "text-indigo-800 hover:bg-indigo-300"
         }`;
@@ -38,14 +58,12 @@ const Sidebar = ({ isMenuOpen }) => {
                 EduTech
             </a>
 
-            <ul className="space-y-5 text-center mt-5 text-xl font-bold w-4/5">
+            <ul className="space-y-5 mt-5 text-xl font-bold w-4/5 list-none p-0">
                 {navItems.map((item) => (
-                    <li
-                        key={item.key}
-                        className={getItemClass(item.name)}
-                        onClick={() => setActiveItem(item.name)}
-                    >
-                        {item.label}
+                    <li key={item.name}>
+                        <NavLink to={item.link} className={getLinkClass}>
+                            {item.label}
+                        </NavLink>
                     </li>
                 ))}
             </ul>

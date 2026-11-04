@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-    });
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState(null);
+
+    const { login } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        console.log("Form Data: ", formData);
+        const result = login(email);
+
+        if (!result.success) {
+            setError(result.error);
+            return;
+        }
+        result.data.role === "admin"
+            ? navigate("/admin/dashboard")
+            : navigate("/student/dashboard");
     }
     return (
         <div className="max-w-300 mx-auto h-screen flex justify-center items-center px-2">
@@ -26,27 +34,24 @@ const Login = () => {
                 </p>
                 <form className="mt-6 w-full" onSubmit={handleSubmit}>
                     <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        id="name"
-                        placeholder="Name:"
-                        className="block w-full rounded border bg-white shadow-sm border-slate-600 p-3"
-                    />
-                    <input
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         id="email"
                         placeholder="Email:"
                         className="block w-full rounded border mt-4 bg-white shadow-sm border-slate-600 p-3"
+                        required
                     />
                     <button className="bg-blue-600 text-white font-medium px-6 rounded py-2 hover:bg-blue-500 cursor-pointer block mx-auto text-lg mt-5 md:w-fit w-full">
                         Login
                     </button>
                 </form>
+                {error && (
+                    <div className="text-center bg-red-200 p-2 rounded mt-3 text-red-800 font-medium">
+                        {error}
+                    </div>
+                )}
             </div>
         </div>
     );

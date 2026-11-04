@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import MainContent from "./MainContent";
+import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +16,9 @@ const DashboardLayout = () => {
             <Sidebar isMenuOpen={isMenuOpen} />
             <div className=" flex-1">
                 <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-                <MainContent />
+                <main>
+                    <Outlet />
+                </main>
             </div>
         </div>
     );
