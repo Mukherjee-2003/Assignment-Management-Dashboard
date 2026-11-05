@@ -8,13 +8,16 @@ import Assignments from "./pages/student/Assignments";
 import ProtectedRoute from "./common/ProtectedRoute";
 import DashboardLayout from "./layout/DashboardLayout";
 import RootRedirect from "./common/RootRidirect";
+import LoginRedirect from "./common/LoginRedirect";
+
+
 
 
 const App = () => {
     return (
         <Routes>
             <Route path="/" element={<RootRedirect />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginRedirect />} />
             <Route
                 path="/admin"
                 element={

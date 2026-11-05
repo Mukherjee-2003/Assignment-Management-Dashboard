@@ -16,7 +16,7 @@ const Assignments = () => {
             <h2 className="text-2xl tracking-tighter font-semibold">
                 My Assignments
             </h2>
-            <div className="grid mt-6 px-4 grid-cols-2 gap-4">
+            <div className="grid mt-6 px-4 grid-cols-1 md:grid-cols-2 gap-4">
                 {myAssignments.map((assignment) => (
                     <div
                         key={assignment.id}

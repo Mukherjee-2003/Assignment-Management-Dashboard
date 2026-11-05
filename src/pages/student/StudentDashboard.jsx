@@ -21,14 +21,14 @@ const StudentDashboard = () => {
 
     return (
         <div className="px-4 py-6">
-            <h2 className="text-2xl font-semibold">
+            <h2 className="text-2xl font-semibold text-center md:text-left">
                 Welcome Back , {user.name || "User"}!
             </h2>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 mt-2 text-center md:text-left">
                 Here's your assignment overview
             </p>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 px-4 w-4/5">
+            <div className="mt-6 grid grid-cols-1 md:mx-0 mx-auto md:grid-cols-2 gap-4 px-4 w-4/5">
                 <div className="border bg-white py-3 px-6 text-center border-slate-800 shadow rounded-lg">
                     <p className="text-sm text-slate-800">Total Assignments</p>
                     <p className="text-5xl font-bold mt-2">{total}</p>

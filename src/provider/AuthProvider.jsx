@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { users } from "../data/users";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchUser = () => {
             try {
@@ -43,7 +44,7 @@ const AuthProvider = ({ children }) => {
     function logout() {
         localStorage.removeItem("loggedInUser");
         setUser("null");
-        <Navigate to="/login" replace />;
+        navigate("/login", { replace: true });
     }
 
     return (

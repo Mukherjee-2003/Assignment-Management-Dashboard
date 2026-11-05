@@ -7,6 +7,8 @@ const ManageAssignments = () => {
     const { user } = useContext(AuthContext);
     const { assignments, setAssignments } = useContext(AssignmentContext);
 
+    console.log("Admin: ",assignments);
+
     const students = users.filter((user) => user.role === "student");
 
     const [formData, setFormData] = useState({
@@ -36,8 +38,11 @@ const ManageAssignments = () => {
 
     function handleStudentSelection(e) {
         const { value, checked } = e.target;
+
+        const studentId = Number(value);
+
         setSelectedStudents((prev) =>
-            checked ? [...prev, value] : prev.filter((id) => id !== value),
+            checked ? [...prev, value] : prev.filter((id) => id !== studentId),
         );
     }
 
@@ -135,10 +140,12 @@ const ManageAssignments = () => {
                 Manage Assignments
             </h2>
 
-            {/* Create Assignment Form */}
             <div className="border rounded px-4 py-3 mt-4">
                 <h3 className="text-xl font-semibold">Create Assignment</h3>
-                <form className="mt-4 w-4/5 space-y-4" onSubmit={handleSubmit}>
+                <form
+                    className="mt-4 md:w-4/5 w-full space-y-4"
+                    onSubmit={handleSubmit}
+                >
                     <input
                         type="text"
                         name="title"

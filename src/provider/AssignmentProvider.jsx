@@ -11,6 +11,8 @@ const AssignmentProvider = ({ children }) => {
             : initialAssignments;
     });
 
+    console.log("Assignments: ", assignments);
+
     function submitAssignment(assignmentId, userId) {
         setAssignments((prev) =>
             prev.map((assignment) => {

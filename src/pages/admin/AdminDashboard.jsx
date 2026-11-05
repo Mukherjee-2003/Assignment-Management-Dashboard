@@ -42,7 +42,7 @@ const AdminDashboard = () => {
                 Here's your dashboard statistics
             </p>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 px-4 w-4/5">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 md:mx-0 mx-auto gap-4 px-4 w-4/5">
                 <div className="border bg-white py-3 px-6 text-center border-slate-800 shadow rounded-lg">
                     <p className="text-sm text-slate-800">Total Assignments</p>
                     <p className="text-5xl font-bold mt-2">

@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = ({ isMenuOpen }) => {
-    const { user } = useContext(AuthContext); 
+    const { user } = useContext(AuthContext);
     const role = user?.role;
 
     const navItems =
@@ -18,11 +18,6 @@ const Sidebar = ({ isMenuOpen }) => {
                       name: "ASSIGNMENTS",
                       label: "Assignments",
                       link: "/admin/assignments",
-                  },
-                  {
-                      name: "STUDENTS",
-                      label: "Students",
-                      link: "/admin/students",
                   },
               ]
             : [
