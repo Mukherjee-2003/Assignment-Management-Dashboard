@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
     function logout() {
         localStorage.removeItem("loggedInUser");
         navigate("/login", { replace: true });
-        setUser("null");
+        setUser(null);
     }
 
     return (
