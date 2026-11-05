@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { users } from "../data/users";
+import { Navigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ const AuthProvider = ({ children }) => {
     function logout() {
         localStorage.removeItem("loggedInUser");
         setUser("null");
+        <Navigate to="/login" replace />;
     }
 
     return (

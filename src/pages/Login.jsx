@@ -21,7 +21,7 @@ const Login = () => {
         }
         result.data.role === "admin"
             ? navigate("/admin/dashboard")
-            : navigate("/student/dashboard");
+            : navigate("/students/dashboard");
     }
     return (
         <div className="max-w-300 mx-auto h-screen flex justify-center items-center px-2">

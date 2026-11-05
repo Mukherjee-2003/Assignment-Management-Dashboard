@@ -11,6 +11,29 @@ const AssignmentProvider = ({ children }) => {
             : initialAssignments;
     });
 
+    function submitAssignment(assignmentId, userId) {
+        setAssignments((prev) =>
+            prev.map((assignment) => {
+                if (assignment.id !== assignmentId) return assignment;
+
+                if (assignment.submissions[userId]?.status === "SUBMITTED") {
+                    return assignment;
+                }
+
+                return {
+                    ...assignment,
+                    submissions: {
+                        ...assignment.submissions,
+                        [userId]: {
+                            status: "SUBMITTED",
+                            submittedAt: new Date().toISOString(),
+                        },
+                    },
+                };
+            }),
+        );
+    }
+
     useEffect(() => {
         const storeAssignments = () => {
             localStorage.setItem("assignments", JSON.stringify(assignments));
@@ -18,7 +41,9 @@ const AssignmentProvider = ({ children }) => {
         storeAssignments();
     }, [assignments]);
     return (
-        <AssignmentContext.Provider value={{ assignments, setAssignments, }}>
+        <AssignmentContext.Provider
+            value={{ assignments, setAssignments, submitAssignment }}
+        >
             {children}
         </AssignmentContext.Provider>
     );

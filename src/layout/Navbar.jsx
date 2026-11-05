@@ -1,4 +1,8 @@
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
+
 const Navbar = ({ isMenuOpen, setIsMenuOpen }) => {
+    const { logout } = useContext(AuthContext);
     return (
         <header>
             <nav className="bg-indigo-300 py-3">
@@ -6,7 +10,12 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }) => {
                     <a href="#" className="font-bold text-3xl">
                         Logo
                     </a>
-                    <span className="font-medium text-xl bg-indigo-700 py-2 px-3 rounded-lg text-white">Welcome, User</span>
+                    <button
+                        className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+                        onClick={logout}
+                    >
+                        Logout
+                    </button>
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="cursor-pointer text-2xl block md:hidden"

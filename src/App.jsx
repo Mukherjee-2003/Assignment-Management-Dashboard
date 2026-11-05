@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Students from "./pages/admin/Students";
@@ -7,17 +7,13 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import Assignments from "./pages/student/Assignments";
 import ProtectedRoute from "./common/ProtectedRoute";
 import DashboardLayout from "./layout/DashboardLayout";
-import AuthContext from "./context/AuthContext";
-import { useContext } from "react";
+import RootRedirect from "./common/RootRidirect";
+
 
 const App = () => {
-    const { user } = useContext(AuthContext);
     return (
         <Routes>
-            <Route
-                path="/"
-                element={<Navigate to={user ? "/dashboard" : "/login"} />}
-            />
+            <Route path="/" element={<RootRedirect />} />
             <Route path="/login" element={<Login />} />
             <Route
                 path="/admin"

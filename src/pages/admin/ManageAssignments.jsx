@@ -18,6 +18,8 @@ const ManageAssignments = () => {
 
     const [selectedStudents, setSelectedStudents] = useState([]);
 
+    const [editingId, setEditingId] = useState(null);
+
     function handleChange(e) {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -47,25 +49,40 @@ const ManageAssignments = () => {
             return;
         }
 
-        const newAssignment = {
-            id: crypto.randomUUID(),
-            ...formData,
-            createdBy: user.id,
-            assignedTo: selectedStudents,
-            submissions: Object.fromEntries(
-                selectedStudents.map((studentId) => [
-                    studentId,
-                    {
-                        status: "NOT_SUBMITTED",
-                        submittedAt: null,
-                    },
-                ]),
-            ),
-        };
+        if (editingId) {
+            setAssignments((prev) =>
+                prev.map((assignment) =>
+                    assignment.id === editingId
+                        ? {
+                              ...assignment,
+                              ...formData,
+                              assignedTo: selectedStudents,
+                          }
+                        : assignment,
+                ),
+            );
 
-        setAssignments((prev) => [newAssignment, ...prev]);
+            setEditingId(null);
+        } else {
+            const newAssignment = {
+                id: crypto.randomUUID(),
+                ...formData,
+                createdBy: user.id,
+                assignedTo: selectedStudents,
+                submissions: Object.fromEntries(
+                    selectedStudents.map((studentId) => [
+                        studentId,
+                        {
+                            status: "NOT_SUBMITTED",
+                            submittedAt: null,
+                        },
+                    ]),
+                ),
+            };
 
-        // Reset Form
+            setAssignments((prev) => [newAssignment, ...prev]);
+        }
+
         setFormData({
             title: "",
             description: "",
@@ -73,6 +90,39 @@ const ManageAssignments = () => {
             driveLink: "",
         });
         setSelectedStudents([]);
+    }
+
+    function handleEdit(id) {
+        const assignment = assignments.find(
+            (assignment) => assignment.id === id,
+        );
+
+        if (!assignment) return;
+
+        setEditingId(assignment.id);
+
+        setFormData({
+            title: assignment.title,
+            description: assignment.description,
+            dueDate: assignment.dueDate,
+            driveLink: assignment.driveLink,
+        });
+
+        setSelectedStudents(assignment.assignedTo);
+    }
+
+    function handleDelete(id) {
+        const userConfirmed = window.confirm(
+            "Are you sure you want to delete this assignment ?",
+        );
+
+        if (userConfirmed) {
+            setAssignments((prev) =>
+                prev.filter((assignment) => assignment.id !== id),
+            );
+        } else {
+            console.log("Action Cancelled");
+        }
     }
 
     const totalCreatedAssignments = assignments.filter(
@@ -180,7 +230,7 @@ const ManageAssignments = () => {
                 </form>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="mt-6 grid grid-cols-1 gap-4">
                 {totalCreatedAssignments.map((assignment) => {
                     let assignedStudents = assignment.assignedTo.length;
                     const submittedCount = Object.values(
@@ -221,11 +271,59 @@ const ManageAssignments = () => {
                                     {assignment.dueDate}
                                 </span>
                             </p>
-                            <p className="mt-4">
-                                Assigned Students: {assignedStudents}
-                            </p>
+                            <div className="mt-5">
+                                <h4 className="font-semibold text-lg mb-3">
+                                    Student Submissions ({assignedStudents})
+                                </h4>
 
-                            {/* Progress Bar */}
+                                <div className="space-y-3">
+                                    {assignment.assignedTo.map((studentId) => {
+                                        const student = students.find(
+                                            (student) =>
+                                                student.id === studentId,
+                                        );
+
+                                        const submission =
+                                            assignment.submissions[studentId];
+
+                                        return (
+                                            <div
+                                                key={studentId}
+                                                className="flex justify-between items-center border rounded-lg px-3 py-2"
+                                            >
+                                                <div>
+                                                    <p className="font-medium">
+                                                        {student?.name ||
+                                                            "Unknown Student"}
+                                                    </p>
+                                                    <p className="text-sm text-slate-500">
+                                                        {submission?.submittedAt
+                                                            ? new Date(
+                                                                  submission.submittedAt,
+                                                              ).toLocaleString()
+                                                            : "Not submitted yet"}
+                                                    </p>
+                                                </div>
+
+                                                <span
+                                                    className={`px-3 py-1 rounded-md text-sm font-medium ${
+                                                        submission?.status ===
+                                                        "SUBMITTED"
+                                                            ? "bg-green-100 text-green-700"
+                                                            : "bg-yellow-100 text-yellow-700"
+                                                    }`}
+                                                >
+                                                    {submission?.status ===
+                                                    "SUBMITTED"
+                                                        ? "Submitted"
+                                                        : "Pending"}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
                             <div className="mt-5">
                                 <div className="flex justify-between items-center">
                                     <span>Total Submissions: </span>
@@ -239,6 +337,20 @@ const ManageAssignments = () => {
                                         style={{ width: `${percentage}%` }}
                                     ></div>
                                 </div>
+                            </div>
+                            <div className="mt-4 flex items-center gap-3">
+                                <button
+                                    onClick={() => handleEdit(assignment.id)}
+                                    className="bg-yellow-500 text-black px-5 py-2 rounded-md hover:bg-yellow-600 cursor-pointer"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(assignment.id)}
+                                    className="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-700 cursor-pointer"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     );
