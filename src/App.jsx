@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Students from "./pages/admin/Students";
 import ManageAssignments from "./pages/admin/ManageAssignments";
